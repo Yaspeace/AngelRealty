@@ -1,0 +1,13 @@
+﻿@model TestViewModel
+
+<form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
+    <input type="file" name="FileToUpload" /><br/>
+    <input type="submit" value="Загрузить" />
+</form>
+<h1>Все изображения:</h1>
+@foreach(var image in Model.Images)
+{
+    <div>
+        <img src="@Url.Content("~" + image.path)" alt="@image.name" />
+    </div>
+}

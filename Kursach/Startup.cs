@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kursach.Models.RealtyDataBase.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kursach
 {
@@ -24,6 +26,8 @@ namespace Kursach
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddDbContext<RealtyDbContext>(optBuilder => 
+                optBuilder.UseNpgsql("Host=localhost;Port=5432;Database=RealtyDb;Username=postgres;Password=123"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +49,7 @@ namespace Kursach
             app.UseRouting();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

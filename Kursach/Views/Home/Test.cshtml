@@ -1,4 +1,8 @@
 ﻿@model TestViewModel
+@{
+    ViewData["Title"] = "Test Page";
+}
+
 
 <form asp-action="Upload" asp-controller="Home" method="post" enctype="multipart/form-data">
     <input type="file" name="FileToUpload" /><br/>

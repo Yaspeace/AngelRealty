@@ -12,6 +12,11 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+
 namespace Kursach.Controllers
 {
     public class HomeController : Controller
@@ -37,6 +42,28 @@ namespace Kursach.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<RedirectResult> Login(string email, string password)
+        {
+            if(db.users.Any(usr => usr.email == email && usr.password == password))
+            {
+                var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, email) };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                return Redirect("Index");
+            }
+            else
+            {
+                return Redirect("Login");
+            }
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -44,6 +71,7 @@ namespace Kursach.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult Test()
         {
             List<AdImageModel> images = db.ad_images.Where(im => im.ad_id == 1).ToList();

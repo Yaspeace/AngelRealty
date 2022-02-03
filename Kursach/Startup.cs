@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +30,9 @@ namespace Kursach
             services.AddControllersWithViews();
             services.AddDbContext<RealtyDbContext>(optBuilder => 
                 optBuilder.UseNpgsql("Host=localhost;Port=5432;Database=RealtyDb;Username=postgres;Password=123"));
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(opt => opt.LoginPath = "/Home/Login");
+            services.AddAuthorization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +54,7 @@ namespace Kursach
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

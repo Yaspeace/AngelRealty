@@ -31,7 +31,7 @@ namespace Kursach
             services.AddDbContext<RealtyDbContext>(optBuilder => 
                 optBuilder.UseNpgsql("Host=localhost;Port=5432;Database=RealtyDb;Username=postgres;Password=123"));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(opt => opt.LoginPath = "/Home/Login");
+                    .AddCookie(opt => opt.LoginPath = "/Account/Login");
             services.AddAuthorization();
         }
 

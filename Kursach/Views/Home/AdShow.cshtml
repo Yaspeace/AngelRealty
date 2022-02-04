@@ -2,3 +2,21 @@
 @{
     ViewData["Title"] = "Объявления по запросу";
 }
+
+@if(Model.Count == 0)
+{
+    <p>Поиск по вашему запросу не дал результатов, измените параметры поиска</p>
+}
+else
+{
+    @foreach(var ad in Model)
+    {
+        <div>
+            <p>@ad.Name</p>
+            <p>@(ad.Flour == null ? "Этажей: "+ ad.TotalFlours.ToString() : "Этаж "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
+            <p>Площадь: @ad.Square</p>
+            <p>Комнат: @ad.RoomsNum</p>
+            <p>Цена: @ad.Price</p>
+        </div>
+    }
+}

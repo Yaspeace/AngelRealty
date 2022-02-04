@@ -54,7 +54,28 @@ namespace Kursach.Controllers
         [HttpPost]
         public IActionResult AdShow(FilterOptions options)
         {
-            return View();
+            List<AnnouncementModel> searched_ad = new List<AnnouncementModel>();
+            List<AdViewInfo> AdToView = new List<AdViewInfo>();
+            foreach(var realty_type in options.ChosenTypes)
+            {
+                searched_ad.AddRange(db.announcements.Where(an =>
+                    an.realty_type_id == realty_type
+                        && an.rooms_num == options.RoomsNum
+                        && (an.address.Contains(options.Address) || options.Address == null || options.Address == "")
+                        && an.ad_type_id == options.Action)
+                    .ToList());
+            }
+            foreach(var ad in searched_ad)
+            {
+                try
+                {
+                    string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
+                    AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address));
+                }
+                catch (InvalidOperationException) { }
+                catch (ArgumentNullException) { }
+            }
+            return View(AdToView);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

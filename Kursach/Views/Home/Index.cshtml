@@ -6,3 +6,11 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a asp-action="Test" asp-controller="Home">Go to test page...</a></p>
 </div>
+@if(ViewBag.IsAuthenticated)
+{
+    <p>You are authenticated!</p>
+}
+else
+{
+    <p>You aren't authenticated!</p>
+}

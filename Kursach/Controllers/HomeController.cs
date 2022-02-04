@@ -54,7 +54,7 @@ namespace Kursach.Controllers
             if(db.users.Any(usr => usr.email == email && usr.password == password))
             {
                 var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, email) };
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme, ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                 return Redirect("Index");
             }
@@ -72,6 +72,7 @@ namespace Kursach.Controllers
 
         [HttpGet]
         [Authorize]
+        //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult Test()
         {
             List<AdImageModel> images = db.ad_images.Where(im => im.ad_id == 1).ToList();

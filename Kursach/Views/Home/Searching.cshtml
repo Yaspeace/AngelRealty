@@ -4,8 +4,8 @@
 }
 
 <form asp-action="AdShow" asp-controller="Home" method="post">
-    <h1 class="display-1">Критерии поиска:</h1>
-    <p>Вид недвижимости:</p>
+    <h1 class="display-4">Критерии поиска:</h1>
+    <p style="font-weight: bold;">Вид недвижимости:</p>
     @foreach(var type in Model.RealtyTypes)
     {
         <p><input type="checkbox" name="ChosenTypes" value="@type.id" />@type.name</p>

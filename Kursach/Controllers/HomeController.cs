@@ -61,7 +61,7 @@ namespace Kursach.Controllers
                 searched_ad.AddRange(db.announcements.Where(an =>
                     an.realty_type_id == realty_type
                         && an.rooms_num == options.RoomsNum
-                        && (an.address.Contains(options.Address) || options.Address == null || options.Address == "")
+                        && (an.address.Contains(options.Address) || options.Address == null || options.Address == "") //Применение фильтров района поиска, если таковые есть
                         && an.ad_type_id == options.Action)
                     .ToList());
             }

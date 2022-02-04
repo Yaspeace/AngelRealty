@@ -16,9 +16,10 @@ namespace Kursach.Models.RealtyDataBase.TableModels
         public int? flour { get; set; }
         public int total_flours { get; set; }
         public decimal price { get; set; }
+        public string address { get; set; }
         public AnnouncementModel() { }
 
-        public AnnouncementModel(int id, string name, string description, int user_id, int realty_type_id, int ad_type_id, int rooms_num, double square, int? flour, int total_flours, decimal price)
+        public AnnouncementModel(int id, string name, string description, int user_id, int realty_type_id, int ad_type_id, int rooms_num, double square, int? flour, int total_flours, decimal price, string address)
         {
             this.id = id;
             this.name = name;
@@ -31,6 +32,7 @@ namespace Kursach.Models.RealtyDataBase.TableModels
             this.flour = flour;
             this.total_flours = total_flours;
             this.price = price;
+            this.address = address;
         }
     }
 }

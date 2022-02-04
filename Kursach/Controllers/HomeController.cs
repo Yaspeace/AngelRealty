@@ -46,6 +46,17 @@ namespace Kursach.Controllers
             return View();
         }
 
+        public IActionResult Searching()
+        {
+            return View(new SearchingModel(db.ad_types.ToList(), db.realty_types.ToList()));
+        }
+
+        [HttpPost]
+        public IActionResult AdShow(FilterOptions options)
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

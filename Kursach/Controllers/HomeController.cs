@@ -70,7 +70,8 @@ namespace Kursach.Controllers
                 try
                 {
                     string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
-                    AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address));
+                    string RealtType = db.realty_types.Find(ad.realty_type_id).name;
+                    AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType));
                 }
                 catch (InvalidOperationException) { }
                 catch (ArgumentNullException) { }

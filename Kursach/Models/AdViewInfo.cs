@@ -11,9 +11,10 @@
         public double Square { get; set; }
         public decimal Price { get; set; }
         public string Address { get; set; }
+        public string RealtyType { get; set; }
         public AdViewInfo() { }
 
-        public AdViewInfo(int id, string name, string imagePath, int roomsNum, int? flour, int totalFlours, double square, decimal price, string address)
+        public AdViewInfo(int id, string name, string imagePath, int roomsNum, int? flour, int totalFlours, double square, decimal price, string address, string realtyType)
         {
             Id = id;
             Name = name;
@@ -24,6 +25,7 @@
             Square = square;
             Price = price;
             Address = address;
+            RealtyType = realtyType;
         }
     }
 }

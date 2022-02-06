@@ -12,12 +12,13 @@ else
 {
     @foreach(var ad in Model)
     {
-        <div>
-            <p>@ad.Name</p>
-            <p>@(ad.Flour == null ? "Этажей: "+ ad.TotalFlours.ToString() : "Этаж "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
+        <a asp-action="Test" asp-controller="Home"> 
+        <div style="border: 2px solid black; border-radius: 5px;">
+            <p><img src="@ad.ImagePath" width="200" height="200" /></p>
+            <p style="font-weight:bold; font-size: 20px;">@ad.RoomsNum - комн. @ad.RealtyType.ToLower(),&nbsp;@(ad.Flour == null ? "этажей: "+ ad.TotalFlours.ToString() : "этаж: "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
             <p>Площадь: @ad.Square</p>
-            <p>Комнат: @ad.RoomsNum</p>
             <p>Цена: @ad.Price</p>
         </div>
+        </a>
     }
 }

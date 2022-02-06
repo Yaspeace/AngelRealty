@@ -1,0 +1,12 @@
+﻿@model Kursach.Models.RealtyDataBase.TableModels.UserModel
+@{
+    ViewData["Title"] = "Личный кабинет";
+}
+
+<p>Имя: @Model.name <a href="#">Изменить...</a></p>
+<p>Фамилия: @Model.surname <a href="#">Изменить...</a></p>
+<p>Email: @Model.email <a href="#">Изменить...</a></p>
+<p>Телефон: @Model.phone <a href="#">Изменить...</a></p>
+<p style="font-weight: bold;"><a asp-action="UsersAd" asp-controller="Home">Мои объявления</a></p>
+<p style="font-weight: bold;"><a href="#">Добавить объявление</a></p>
+<p style="font-weight: bold;"><a href="#">Избранное</a></p>

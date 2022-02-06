@@ -15,9 +15,9 @@
                 @if(Context.User.Identity.IsAuthenticated)
                 {
                     <a class="text-info" asp-controller="Home" asp-action="Test">@Context.User.Identity.Name</a>
-                    <ul style="position: absolute; border: 2px solid black;z-index: 10;">
-                        <li style="height: 3em;"><a asp-controller="Home" asp-action="Test">Личный кабинет</a></li>
-                        <li style="height: 3em;"><a asp-controller="Account" asp-action="Logout">Выход</a></li>
+                    <ul style="position: absolute; z-index: 10; list-style-type: none;">
+                        <li style="height: 3em; border: 1px solid gray; width: 100%; background: white;"><a asp-controller="Home" asp-action="UserLK">Личный кабинет</a></li>
+                        <li style="height: 3em; border: 1px solid gray; width: 100%; background: white;"><a asp-controller="Account" asp-action="Logout">Выход</a></li>
                     </ul>
                 }
                 else

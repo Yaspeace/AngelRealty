@@ -32,7 +32,7 @@ namespace Kursach.Controllers
             if (db.users.Any(usr => usr.email == email && usr.password == password))
             {
                 await Authenticate(email);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("UserLK", "Home");
             }
             else
             {
@@ -67,7 +67,7 @@ namespace Kursach.Controllers
                     db.users.Add(user);
                     db.SaveChanges();
                     await Authenticate(user.email);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("UserLK", "Home");
                 }
                 else
                     return RedirectToAction("Register", "Account");

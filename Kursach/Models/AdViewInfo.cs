@@ -12,9 +12,11 @@
         public decimal Price { get; set; }
         public string Address { get; set; }
         public string RealtyType { get; set; }
+        public bool IsFavorite { get; set; }
+        public int ViewsNum { get; set; }
         public AdViewInfo() { }
 
-        public AdViewInfo(int id, string name, string imagePath, int roomsNum, int? flour, int totalFlours, double square, decimal price, string address, string realtyType)
+        public AdViewInfo(int id, string name, string imagePath, int roomsNum, int? flour, int totalFlours, double square, decimal price, string address, string realtyType, bool isFavorite, int viewsNum)
         {
             Id = id;
             Name = name;
@@ -26,6 +28,8 @@
             Price = price;
             Address = address;
             RealtyType = realtyType;
+            IsFavorite = isFavorite;
+            ViewsNum = viewsNum;
         }
     }
 }

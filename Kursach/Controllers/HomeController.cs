@@ -71,10 +71,34 @@ namespace Kursach.Controllers
                 {
                     string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
                     string RealtType = db.realty_types.Find(ad.realty_type_id).name;
-                    AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType));
+                    UserModel? user = db.users.Where(u => u.email == HttpContext.User.Identity.Name).FirstOrDefault();
+                    bool isFavorite = false;
+                    if(user == null)
+                        isFavorite = db.users_favorites.Any(uf => uf.user_id == user.id && uf.ad_id == ad.id);
+                    AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num));
                 }
-                catch (InvalidOperationException) { }
-                catch (ArgumentNullException) { }
+                catch (InvalidOperationException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (InvalidOperation)"); }
+                catch (ArgumentNullException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (ArgumentNull)"); }
+            }
+            return View(AdToView);
+        }
+
+        [Authorize]
+        public IActionResult UserLK()
+        {
+            return View(db.users.Where(u => u.email == HttpContext.User.Identity.Name).First());
+        }
+
+        [Authorize]
+        public IActionResult UsersAd()
+        {
+            List<AdViewInfo> AdToView = new List<AdViewInfo>();
+            int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
+            foreach(var ad in db.announcements.Where(an => an.user_id == uid).ToList())
+            {
+                string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
+                string RealtType = db.realty_types.Find(ad.realty_type_id).name;
+                AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, false, ad.views_num));
             }
             return View(AdToView);
         }

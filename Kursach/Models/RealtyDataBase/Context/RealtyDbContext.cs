@@ -10,6 +10,7 @@ namespace Kursach.Models.RealtyDataBase.Context
         public DbSet<RealtyTypeModel> realty_types { get; set; }
         public DbSet<UserModel> users { get; set; }
         public DbSet<AdImageModel> ad_images { get; set; }
+        public DbSet<UsersFavorite> users_favorites { get; set; }
         
         public RealtyDbContext(DbContextOptions opt) : base(opt)
         {

@@ -1,0 +1,19 @@
+﻿@model AnnouncementViewModel
+@{
+    ViewData["Title"] = Model.AdInfo.Name;
+}
+
+@foreach(var im in Model.AdInfo.Images)
+{
+    <img src="@Url.Content("~" + im.path)" width="400" height="400" />
+}
+
+<p class="display-1">@Model.AdInfo.RoomsNum - комн. @Model.AdInfo.RealtyType.ToLower(),&nbsp;@(Model.AdInfo.Flour == null ? "этажей: "+ Model.AdInfo.TotalFlours.ToString() : "этаж: "+Model.AdInfo.Flour.ToString()+"/"+Model.AdInfo.TotalFlours.ToString())</p>
+<p class="display-4">Площадь: @Model.AdInfo.Square</p>
+<p class="display-4">Цена: @Model.AdInfo.Price</p>
+<p class="display-4">Адрес: @Model.AdInfo.Address</p>
+<p class="display-4">Продавец: @Model.SellerInfo.Name @Model.SellerInfo.Surname</p>
+<p class="display-4">@Model.SellerInfo.Email</p>
+<a href="#">Показать телефон</a>
+<p>@Model.SellerInfo.Phone</p>
+<a href="#">Добавить в избранное</a>

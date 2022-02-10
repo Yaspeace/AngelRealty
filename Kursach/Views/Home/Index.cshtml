@@ -18,15 +18,3 @@
         <p>Аренда квартир</p>
         <p><a class="btn-info" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
     </div>
-
-<div class="text-center">
-    <p>Learn about <a asp-action="Test" asp-controller="Home">Go to test page...</a></p>
-</div>
-@if(Context.User.Identity.IsAuthenticated)
-{
-    <p>You are authenticated!</p>
-}
-else
-{
-    <p>You aren't authenticated!</p>
-}

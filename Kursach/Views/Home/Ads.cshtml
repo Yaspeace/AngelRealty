@@ -13,7 +13,7 @@ else
     {
          
         <div style="border: 2px solid black; border-radius: 5px;">
-            <a asp-action="Test" asp-controller="Home">
+            <a href="/Home/Announcement?ad_id=@ad.Id">
                 <p><img src="@ad.ImagePath" width="200" height="200" /></p>
             <p style="font-weight:bold; font-size: 20px;">@ad.RoomsNum - комн. @ad.RealtyType.ToLower(),&nbsp;@(ad.Flour == null ? "этажей: "+ ad.TotalFlours.ToString() : "этаж: "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
             </a>

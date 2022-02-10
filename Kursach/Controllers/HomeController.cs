@@ -119,7 +119,7 @@ namespace Kursach.Controllers
         public void RemoveFromFavorite(int ad_id)
         {
             int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
-            UsersFavorite? usfav = db.users_favorites.Where(uf => uf.ad_id == ad_id && uf.user_id == uid).FirstOrDefault();
+            UsersFavorite usfav = db.users_favorites.Where(uf => uf.ad_id == ad_id && uf.user_id == uid).FirstOrDefault();
             if(usfav != null)
             {
                 db.users_favorites.Remove(usfav);
@@ -169,6 +169,16 @@ namespace Kursach.Controllers
         private IActionResult Ads(AdsViewModel model)
         {
             return View("Ads", model);
+        }
+
+        public IActionResult Announcement(int ad_id)
+        {
+            AnnouncementModel ad = db.announcements.Find(ad_id);
+            UserModel seller = db.users.Find(ad.user_id);
+            string RealtType = db.realty_types.Find(ad.realty_type_id).name;
+            AnnouncementViewInfo anInfo = new AnnouncementViewInfo(ad.id, ad.name, "", ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, false, ad.views_num, db.ad_images.Where(adim => adim.ad_id == ad.id).ToList());
+            SellerViewInfo selInfo = new SellerViewInfo(seller.name, seller.surname, seller.phone, seller.email);
+            return View(new AnnouncementViewModel(anInfo, selInfo));
         }
 
         [HttpPost]

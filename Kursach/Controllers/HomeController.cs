@@ -175,6 +175,12 @@ namespace Kursach.Controllers
         {
             AnnouncementModel ad = db.announcements.Find(ad_id);
             UserModel seller = db.users.Find(ad.user_id);
+            
+            if (!HttpContext.User.Identity.IsAuthenticated || seller.id != db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id)
+            {
+                ad.views_num++;
+                db.SaveChanges();
+            }
             string RealtType = db.realty_types.Find(ad.realty_type_id).name;
             AnnouncementViewInfo anInfo = new AnnouncementViewInfo(ad.id, ad.name, "", ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, false, ad.views_num, db.ad_images.Where(adim => adim.ad_id == ad.id).ToList());
             SellerViewInfo selInfo = new SellerViewInfo(seller.name, seller.surname, seller.phone, seller.email);

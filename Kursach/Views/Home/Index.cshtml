@@ -22,7 +22,7 @@
 <div class="text-center">
     <p>Learn about <a asp-action="Test" asp-controller="Home">Go to test page...</a></p>
 </div>
-@if(ViewBag.IsAuthenticated)
+@if(Context.User.Identity.IsAuthenticated)
 {
     <p>You are authenticated!</p>
 }

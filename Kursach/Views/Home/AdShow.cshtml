@@ -23,14 +23,13 @@ else
             <p>
                 @if(ad.IsFavorite) 
                 { 
-                    <a asp-action="Test" asp-controller="Home">&#9829;</a>
+                    <a style="cursor: pointer;font-size: 30px;" onclick="Liking(@ad.Id);" id="@("like" + ad.Id.ToString())">&#9829;</a>
                 } 
                 else 
                 {
-                    <a asp-action="Test" asp-controller="Home">&#9825;</a>
+                    <a style="cursor: pointer;font-size: 30px;" onclick="Liking(@ad.Id);" id="@("like" + ad.Id.ToString())">&#9825;</a>
                 }
             </p>
         </div>
-        
     }
 }

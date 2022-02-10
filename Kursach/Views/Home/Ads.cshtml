@@ -1,0 +1,45 @@
+﻿@model AdsViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+@if(Model.Ads.Count == 0)
+{
+    <p>Нет результатов!</p>
+}
+else
+{
+    @foreach(var ad in Model.Ads)
+    {
+         
+        <div style="border: 2px solid black; border-radius: 5px;">
+            <a asp-action="Test" asp-controller="Home">
+                <p><img src="@ad.ImagePath" width="200" height="200" /></p>
+            <p style="font-weight:bold; font-size: 20px;">@ad.RoomsNum - комн. @ad.RealtyType.ToLower(),&nbsp;@(ad.Flour == null ? "этажей: "+ ad.TotalFlours.ToString() : "этаж: "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
+            </a>
+            <p>Площадь: @ad.Square</p>
+            <p>Цена: @ad.Price</p>
+            @if(Model.ShowHearts)
+            {
+                <p>
+                    @if(ad.IsFavorite) 
+                    { 
+                        <a style="cursor: pointer;font-size: 30px;" onclick="Liking(@ad.Id);" id="@("like" + ad.Id.ToString())">&#9829;</a>
+                    } 
+                    else 
+                    {
+                        <a style="cursor: pointer;font-size: 30px;" onclick="Liking(@ad.Id);" id="@("like" + ad.Id.ToString())">&#9825;</a>
+                    }
+                </p>
+            }
+            @if(Model.ShowViews)
+            {
+                <p>Просмотров: @ad.ViewsNum</p>
+            }
+            @if(Model.EnableCrud)
+            {
+                <p><a href="#">Удалить</a>&nbsp;<a href="#">Изменить</a></p>
+            }
+        </div>
+    }
+}

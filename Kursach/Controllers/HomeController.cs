@@ -32,7 +32,6 @@ namespace Kursach.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.IsAuthenticated = HttpContext.User.Identity.IsAuthenticated;
             return View();
         }
 
@@ -55,8 +54,7 @@ namespace Kursach.Controllers
         public IActionResult AdShow(FilterOptions options)
         {
             List<AnnouncementModel> searched_ad = new List<AnnouncementModel>();
-            List<AdViewInfo> AdToView = new List<AdViewInfo>();
-            foreach(var realty_type in options.ChosenTypes)
+            foreach (var realty_type in options.ChosenTypes)
             {
                 searched_ad.AddRange(db.announcements.Where(an =>
                     an.realty_type_id == realty_type
@@ -65,22 +63,8 @@ namespace Kursach.Controllers
                         && an.ad_type_id == options.Action)
                     .ToList());
             }
-            foreach(var ad in searched_ad)
-            {
-                try
-                {
-                    string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
-                    string RealtType = db.realty_types.Find(ad.realty_type_id).name;
-                    UserModel? user = db.users.Where(u => u.email == HttpContext.User.Identity.Name).FirstOrDefault();
-                    bool isFavorite = false;
-                    if(user == null)
-                        isFavorite = db.users_favorites.Any(uf => uf.user_id == user.id && uf.ad_id == ad.id);
-                    AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num));
-                }
-                catch (InvalidOperationException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (InvalidOperation)"); }
-                catch (ArgumentNullException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (ArgumentNull)"); }
-            }
-            return View(AdToView);
+            AdsViewModel model = new AdsViewModel("Объявления по запросу", DataSelectionToViewInfo(searched_ad), true);
+            return Ads(model);
         }
 
         [Authorize]
@@ -92,15 +76,55 @@ namespace Kursach.Controllers
         [Authorize]
         public IActionResult UsersAd()
         {
-            List<AdViewInfo> AdToView = new List<AdViewInfo>();
             int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
-            foreach(var ad in db.announcements.Where(an => an.user_id == uid).ToList())
+            AdsViewModel model = new AdsViewModel("Ваши объявления", DataSelectionToViewInfo(db.announcements.Where(an => an.user_id == uid).ToList()), false, true, true);
+            return Ads(model);
+        }
+
+        [Authorize]
+        public IActionResult UsersFavorite()
+        {
+            int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
+            List<AnnouncementModel> ads = db.users_favorites.Where(uf => uf.user_id == uid)
+                .Join(
+                    db.announcements,
+                    uf => uf.ad_id,
+                    ad => ad.id,
+                    (uf, ad) => new AnnouncementModel(ad.id, ad.name, ad.description, ad.user_id, ad.realty_type_id, ad.ad_type_id, ad.rooms_num, ad.square, ad.flour, ad.total_flours, ad.price, ad.address, ad.views_num)).ToList();
+            AdsViewModel model = new AdsViewModel("Ваши избранные", DataSelectionToViewInfo(ads), true);
+            return Ads(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public void Liking(int ad_id)
+        {
+            int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
+            if(db.users_favorites.Any(uf => uf.user_id == uid && uf.ad_id == ad_id))
+                RemoveFromFavorite(ad_id);
+            else
+                AddToFavorite(ad_id);
+        }
+
+        public void AddToFavorite(int ad_id)
+        {
+            int new_id = 1;
+            if(db.users_favorites.Any())
+                new_id = db.users_favorites.Max(uf => uf.id) + 1;
+            int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
+            db.users_favorites.Add(new UsersFavorite(new_id, uid, ad_id));
+            db.SaveChanges();
+        }
+
+        public void RemoveFromFavorite(int ad_id)
+        {
+            int uid = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id;
+            UsersFavorite? usfav = db.users_favorites.Where(uf => uf.ad_id == ad_id && uf.user_id == uid).FirstOrDefault();
+            if(usfav != null)
             {
-                string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
-                string RealtType = db.realty_types.Find(ad.realty_type_id).name;
-                AdToView.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, false, ad.views_num));
+                db.users_favorites.Remove(usfav);
+                db.SaveChanges();
             }
-            return View(AdToView);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -111,12 +135,40 @@ namespace Kursach.Controllers
 
         [HttpGet]
         [Authorize]
-        //[Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public IActionResult Test()
         {
             List<AdImageModel> images = db.ad_images.Where(im => im.ad_id == 1).ToList();
             TestViewModel model = new TestViewModel(images);
             return View(model);
+        }
+
+        private List<AdViewInfo> DataSelectionToViewInfo(List<AnnouncementModel> ads)
+        {
+            List<AdViewInfo> result = new List<AdViewInfo>();
+            foreach (var ad in ads)
+            {
+                try
+                {
+                    string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
+                    string RealtType = db.realty_types.Find(ad.realty_type_id).name;
+                    bool isFavorite = false;
+                    if (HttpContext.User.Identity.IsAuthenticated)
+                    {
+                        UserModel user = db.users.Where(u => u.email == HttpContext.User.Identity.Name).FirstOrDefault();
+                        if (user != null)
+                            isFavorite = db.users_favorites.Any(uf => uf.user_id == user.id && uf.ad_id == ad.id);
+                    }
+                    result.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num));
+                }
+                catch (InvalidOperationException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (InvalidOperation)"); }
+                catch (ArgumentNullException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (ArgumentNull)"); }
+            }
+            return result;
+        }
+
+        private IActionResult Ads(AdsViewModel model)
+        {
+            return View("Ads", model);
         }
 
         [HttpPost]

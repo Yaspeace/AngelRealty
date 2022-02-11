@@ -182,9 +182,84 @@ namespace Kursach.Controllers
                 db.SaveChanges();
             }
             string RealtType = db.realty_types.Find(ad.realty_type_id).name;
-            AnnouncementViewInfo anInfo = new AnnouncementViewInfo(ad.id, ad.name, "", ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, false, ad.views_num, db.ad_images.Where(adim => adim.ad_id == ad.id).ToList());
+            AnnouncementViewInfo anInfo = new AnnouncementViewInfo(ad.id, 
+                                                                    ad.name,
+                                                                    db.ad_images.Where(adim => adim.ad_id == ad.id).First().path, 
+                                                                    ad.rooms_num, 
+                                                                    ad.flour, 
+                                                                    ad.total_flours, 
+                                                                    ad.square, 
+                                                                    ad.price, 
+                                                                    ad.address, 
+                                                                    RealtType, 
+                                                                    false, 
+                                                                    ad.views_num, 
+                                                                    db.ad_images.Where(adim => adim.ad_id == ad.id).ToList(), 
+                                                                    ad.description);
             SellerViewInfo selInfo = new SellerViewInfo(seller.name, seller.surname, seller.phone, seller.email);
             return View(new AnnouncementViewModel(anInfo, selInfo));
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult AnnouncementAdding()
+        {
+            return View(new AnnouncementAddingViewModel(db.ad_types.ToList(), db.realty_types.ToList()));
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AnnouncementAdding(IFormFileCollection Images, AddingAnnouncementForm adToAdd)
+        {
+            string realtyName = db.realty_types.Find(adToAdd.RealtyType).name;
+            AnnouncementModel ad = new AnnouncementModel
+            {
+                id = db.announcements.Max(ad => ad.id) + 1,
+                address = adToAdd.Address,
+                ad_type_id = adToAdd.AdType,
+                description = adToAdd.Description,
+                flour = adToAdd.Flour,
+                name = $"{adToAdd.RoomsNum} - комн. {realtyName.ToLower()}," + ((adToAdd.Flour == null || adToAdd.Flour < 1) ? $"этажей: {adToAdd.TotalFlours}" : $"этаж: {adToAdd.Flour}/{adToAdd.TotalFlours}"),
+                price = adToAdd.Price,
+                realty_type_id = adToAdd.RealtyType,
+                rooms_num = adToAdd.RoomsNum,
+                square = adToAdd.Square,
+                total_flours = adToAdd.TotalFlours,
+                user_id = db.users.Where(u => u.email == HttpContext.User.Identity.Name).First().id,
+                views_num = 0
+            };
+            db.announcements.Add(ad);
+            foreach(var img in Images)
+                UploadFile(img, ad.id);
+            db.SaveChanges();
+            return View("UsersAd");
+        }
+
+        private void UploadFile(IFormFile FileToUpload, int adId)
+        {
+            int new_id = 1;
+            try
+            {
+                new_id = db.ad_images.Max(im => im.id) + 1;
+            }
+            catch (InvalidOperationException) { }
+
+            string name = "Image" + new_id.ToString() + ".jpg";
+
+            string path = "/images/" + name;
+            using (var fileStream = new FileStream(_appEnv.WebRootPath + path, FileMode.Create))
+            {
+                FileToUpload.CopyTo(fileStream);
+            }
+            AdImageModel image = new AdImageModel
+            {
+                id = new_id,
+                ad_id = adId,
+                name = name,
+                path = path
+            };
+            db.ad_images.Add(image);
+            db.SaveChanges();
         }
 
         [HttpPost]

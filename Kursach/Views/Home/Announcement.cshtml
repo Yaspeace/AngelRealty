@@ -9,6 +9,7 @@
 }
 
 <p class="display-1">@Model.AdInfo.RoomsNum - комн. @Model.AdInfo.RealtyType.ToLower(),&nbsp;@(Model.AdInfo.Flour == null ? "этажей: "+ Model.AdInfo.TotalFlours.ToString() : "этаж: "+Model.AdInfo.Flour.ToString()+"/"+Model.AdInfo.TotalFlours.ToString())</p>
+<p class="display-4 font-weight-bold">@Model.AdInfo.Description</p>
 <p class="display-4">Площадь: @Model.AdInfo.Square</p>
 <p class="display-4">Цена: @Model.AdInfo.Price</p>
 <p class="display-4">Адрес: @Model.AdInfo.Address</p>

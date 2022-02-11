@@ -1,0 +1,31 @@
+﻿@model AnnouncementAddingViewModel
+@{
+    ViewData["Title"] = "Добавление объявления";
+}
+
+<form asp-action="AnnouncementAdding" asp-controller="Home" method="post">
+    <div id="files"></div>
+    <p><a style="cursor: pointer;color: blue;" onclick="AddFile()">Добавить изображение</a></p>
+    <p><select name="RealtyType">
+        <option selected disabled>Тип недвижимости</option>
+        @foreach(var typ in Model.RealtyTypes)
+        {
+            <option value="@typ.id">@typ.name</option>
+        }
+    </select></p>
+    <p><select name="AdType">
+        <option selected disabled>Вид объявления</option>
+        @foreach(var typ in Model.AdTypes)
+        {
+            <option value="@typ.id">@typ.name</option>
+        }
+    </select></p>
+    <p><input type="text" name="Description" placeholder="Описание..." /></p>
+    <p><input type="text" name="Square" placeholder="Площадь" /></p>
+    <div id="flour"><input type="number" name="Flour" placeholder="Этаж" /></div>
+    <p><input type="number" name="TotalFlours" placeholder="Этажность" /></p>
+    <p><input type="number" name="RoomsNum" placeholder="Число комнат" /></p>
+    <p><input type="text" name="Address" placeholder="Адрес" /></p>
+    <p><input type="text" name="Price" placeholder="Цена" /></p>
+    <input type="submit" value="Разместить" />
+</form>

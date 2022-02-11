@@ -12,3 +12,8 @@ function Liking(ad_id) {
         lbl.textContent == '♥' ? lbl.textContent = '♡' : lbl.textContent = '♥';
     });
 }
+
+function AddFile() {
+    var div_files = document.getElementById("files");
+    div_files.insertAdjacentHTML('afterend', '<p><input type="file" name="Images" /></p>');
+}

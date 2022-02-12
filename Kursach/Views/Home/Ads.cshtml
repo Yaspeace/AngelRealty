@@ -38,8 +38,28 @@ else
             }
             @if(Model.EnableCrud)
             {
-                <p><a href="#">Удалить</a>&nbsp;<a href="#">Изменить</a></p>
+                <p><button type="button" class="btn btn-primary" onclick="OpenModal(@ad.Id)">Удалить</button>&nbsp;<button type="button" class="btn btn-primary" onclick="">Изменить</button></p>
             }
         </div>
     }
 }
+<!--Диалоговое окно подтверждения удаления-->
+<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Удаление объявления</h5>
+        </div>
+        <div class="modal-body">
+          <p>Вы уверены, что хотите удалить объявление?</p>
+        </div>
+        <div class="modal-footer">
+            <form asp-action="AnnouncementRemove" asp-controller="Home" method="post">
+                <input type="hidden" value="0" name="adId" id="adId"/>
+                <button type="submit" class="btn btn-primary">Да</button>
+            </form>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="HideModal()">Нет</button>
+        </div>
+      </div>
+    </div>
+  </div>

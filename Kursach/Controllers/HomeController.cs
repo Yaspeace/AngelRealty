@@ -209,7 +209,7 @@ namespace Kursach.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AnnouncementAdding(IFormFileCollection Images, AddingAnnouncementForm adToAdd)
+        public IActionResult AnnouncementAdding(AddingAnnouncementForm adToAdd)
         {
             string realtyName = db.realty_types.Find(adToAdd.RealtyType).name;
             AnnouncementModel ad = new AnnouncementModel
@@ -229,10 +229,22 @@ namespace Kursach.Controllers
                 views_num = 0
             };
             db.announcements.Add(ad);
-            foreach(var img in Images)
+            foreach(var img in adToAdd.Images)
                 UploadFile(img, ad.id);
             db.SaveChanges();
-            return View("UsersAd");
+            return UsersAd();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AnnouncementRemove(int adId)
+        {
+            foreach (var image in db.ad_images.Where(im => im.ad_id == adId))
+                System.IO.File.Delete(_appEnv.WebRootPath + image.path);
+            db.ad_images.RemoveRange(db.ad_images.Where(im => im.ad_id == adId));
+            db.announcements.Remove(db.announcements.Find(adId));
+            db.SaveChanges();
+            return UsersAd();
         }
 
         private void UploadFile(IFormFile FileToUpload, int adId)

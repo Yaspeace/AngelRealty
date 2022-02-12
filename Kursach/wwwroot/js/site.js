@@ -17,3 +17,15 @@ function AddFile() {
     var div_files = document.getElementById("files");
     div_files.insertAdjacentHTML('afterend', '<p><input type="file" name="Images" /></p>');
 }
+
+function OpenModal(adId) {
+    document.getElementById('adId').value = adId;
+    const modal = new bootstrap.Modal(document.querySelector('#modal'));
+    modal.show();
+}
+
+function HideModal() {
+    document.getElementById('adId').value = 0;
+    const modal = new bootstrap.Modal(document.querySelector('#modal'));
+    modal.hide();
+}

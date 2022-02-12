@@ -4,7 +4,7 @@ namespace Kursach.Models
 {
     public class AddingAnnouncementForm
     {
-        //public IFormFileCollection Images { get; set; }
+        public IFormFileCollection Images { get; set; }
         public int RealtyType { get; set; }
         public int AdType { get; set; }
         public string Description { get; set; }
@@ -14,10 +14,10 @@ namespace Kursach.Models
         public string Address { get; set; }
         public decimal Price { get; set; }
         public int RoomsNum { get; set; }
-
-        public AddingAnnouncementForm(/*IFormFileCollection images, */int realtyType, int adType, string description, double square, int totalFlours, string address, decimal price, int roomsNum, int? flour = null)
+        public AddingAnnouncementForm() { }
+        public AddingAnnouncementForm(IFormFileCollection images, int realtyType, int adType, string description, double square, int totalFlours, string address, decimal price, int roomsNum, int? flour = null)
         {
-            //Images = images;
+            Images = images;
             RealtyType = realtyType;
             AdType = adType;
             Description = description;

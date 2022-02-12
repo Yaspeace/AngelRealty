@@ -38,7 +38,7 @@ else
             }
             @if(Model.EnableCrud)
             {
-                <p><button type="button" class="btn btn-primary" onclick="OpenModal(@ad.Id)">Удалить</button>&nbsp;<button type="button" class="btn btn-primary" onclick="">Изменить</button></p>
+                <p><button type="button" class="btn btn-primary" onclick="OpenModal(@ad.Id)">Удалить</button>&nbsp;<a type="button" class="btn btn-primary" asp-action="AnnouncementEditing" asp-controller="Home" asp-route-adId="@ad.Id">Изменить</a></p>
             }
         </div>
     }

@@ -1,0 +1,44 @@
+﻿@model AnnouncementEditingViewModel
+@{
+    ViewData["Title"] = "Изменение объявления";
+}
+
+<form asp-action="AnnouncementEditing" asp-controller="Home" method="post">
+    <p><select name="RealtyType">
+        <option disabled>Тип недвижимости</option>
+        @foreach(var typ in Model.RealtyTypes)
+        {
+            if(typ.id == Model.AdInfo.RealtyType)
+                {
+                    <option value="@typ.id" selected>@typ.name</option>
+                }
+                else
+                {
+                    <option value="@typ.id">@typ.name</option>
+                }
+        }
+    </select></p>
+    <p><select name="AdType">
+        <option disabled>Вид объявления</option>
+        @foreach(var typ in Model.AdTypes)
+        {
+            if(typ.id == Model.AdInfo.AdType)
+                {
+                    <option value="@typ.id" selected>@typ.name</option>
+                }
+                else
+                {
+                    <option value="@typ.id">@typ.name</option>
+                }
+        }
+    </select></p>
+    <input type="hidden" value="@Model.AdInfo.Id" name="Id" />
+    <p><input type="text" name="Description" placeholder="Описание..." value="@Model.AdInfo.Description"/></p>
+    <p><input type="text" name="Square" placeholder="Площадь" value="@Model.AdInfo.Square"/></p>
+    <div id="flour"><input type="number" name="Flour" placeholder="Этаж" value="@Model.AdInfo.Flour"/></div>
+    <p><input type="number" name="TotalFlours" placeholder="Этажность" value="@Model.AdInfo.TotalFlours"/></p>
+    <p><input type="number" name="RoomsNum" placeholder="Число комнат" value="@Model.AdInfo.RoomsNum" /></p>
+    <p><input type="text" name="Address" placeholder="Адрес" value="@Model.AdInfo.Address" /></p>
+    <p><input type="text" name="Price" placeholder="Цена" value="@Model.AdInfo.Price" /></p>
+    <p><input type="submit" class="btn btn-primary" value="Изменить" />&nbsp;<a type="button" class="btn btn-primary" asp-action="UsersAd" asp-controller="Home">Отмена</a> </p>
+</form>

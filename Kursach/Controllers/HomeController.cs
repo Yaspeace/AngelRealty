@@ -236,6 +236,47 @@ namespace Kursach.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        public IActionResult AnnouncementEditing(int adId)
+        {
+            AnnouncementModel ad = db.announcements.Find(adId);
+            AddingAnnouncementForm forminfo = new AddingAnnouncementForm
+            {
+                Address = ad.address,
+                AdType = ad.ad_type_id,
+                Description = ad.description,
+                Flour = ad.flour,
+                Images = null,
+                Price = ad.price,
+                RealtyType = ad.realty_type_id,
+                RoomsNum = ad.rooms_num,
+                Square = ad.square,
+                TotalFlours = ad.total_flours,
+                Id = ad.id
+            };
+            return View(new AnnouncementEditingViewModel(db.ad_types.ToList(), db.realty_types.ToList(), forminfo));
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult AnnouncementEditing(AddingAnnouncementForm adToEdit)
+        {
+            AnnouncementModel ad = db.announcements.Find(adToEdit.Id);
+            ad.address = adToEdit.Address;
+            ad.description = adToEdit.Description;
+            ad.ad_type_id = adToEdit.AdType;
+            ad.flour = adToEdit.Flour;
+            ad.total_flours = adToEdit.TotalFlours;
+            ad.realty_type_id = adToEdit.RealtyType;
+            ad.price = adToEdit.Price;
+            ad.rooms_num = adToEdit.RoomsNum;
+            ad.square = adToEdit.Square;
+            ad.name = $"{adToEdit.RoomsNum} - комн. {db.realty_types.Find(ad.realty_type_id).name.ToLower()}," + ((adToEdit.Flour == null || adToEdit.Flour < 1) ? $"этажей: {adToEdit.TotalFlours}" : $"этаж: {adToEdit.Flour}/{adToEdit.TotalFlours}");
+            db.SaveChanges();
+            return UsersAd();
+        }
+
+        [Authorize]
         [HttpPost]
         public IActionResult AnnouncementRemove(int adId)
         {

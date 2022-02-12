@@ -4,6 +4,7 @@ namespace Kursach.Models
 {
     public class AddingAnnouncementForm
     {
+        public int Id { get; set; } = 0;
         public IFormFileCollection Images { get; set; }
         public int RealtyType { get; set; }
         public int AdType { get; set; }

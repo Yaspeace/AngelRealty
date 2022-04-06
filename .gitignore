@@ -361,4 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+Startup.cs
 /Kursach/wwwroot/images/Image1.jpg

@@ -63,7 +63,9 @@ namespace Kursach.Controllers
             {
                 if (!db.users.Any(u => u.email == user.email))
                 {
-                    user.id = db.users.Max(u => u.id) + 1;
+                    user.id = 1;
+                    if(db.users.Any())
+                        user.id = db.users.Max(u => u.id) + 1;
                     db.users.Add(user);
                     db.SaveChanges();
                     await Authenticate(user.email);

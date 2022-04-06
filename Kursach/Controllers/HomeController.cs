@@ -212,9 +212,12 @@ namespace Kursach.Controllers
         public IActionResult AnnouncementAdding(AddingAnnouncementForm adToAdd)
         {
             string realtyName = db.realty_types.Find(adToAdd.RealtyType).name;
+            int new_id = 1;
+            if (db.announcements.Count() > 0)
+                new_id = db.announcements.Max(ad => ad.id) + 1;
             AnnouncementModel ad = new AnnouncementModel
             {
-                id = db.announcements.Max(ad => ad.id) + 1,
+                id = new_id,
                 address = adToAdd.Address,
                 ad_type_id = adToAdd.AdType,
                 description = adToAdd.Description,

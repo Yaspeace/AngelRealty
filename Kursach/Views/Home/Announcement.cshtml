@@ -15,6 +15,21 @@
 <p class="display-4">Адрес: @Model.AdInfo.Address</p>
 <p class="display-4">Продавец: @Model.SellerInfo.Name @Model.SellerInfo.Surname</p>
 <p class="display-4">@Model.SellerInfo.Email</p>
-<a href="#">Показать телефон</a>
-<p>@Model.SellerInfo.Phone</p>
-<a href="#">Добавить в избранное</a>
+<p><a id="a_show" class="btn-info" onclick="ShowHide()">Показать телефон</a></p>
+<p class="hidden" id="phone">@Model.SellerInfo.Phone</p>
+<p><a href="#">Добавить в избранное</a></p>
+
+<script>
+    function ShowHide() {
+        var a = document.getElementById("a_show");
+        var p = document.getElementById("phone");
+        if(p.classList.contains("hidden")) {
+            a.innerText = "Скрыть телефон";
+        }
+        else {
+            a.innerText = "Показать телефон";
+            
+        }
+        p.classList.toggle("hidden");
+    }
+</script>

@@ -3,10 +3,32 @@
     ViewData["Title"] = "Личный кабинет";
 }
 
-<p>Имя: @Model.name <a href="#">Изменить...</a></p>
-<p>Фамилия: @Model.surname <a href="#">Изменить...</a></p>
-<p>Email: @Model.email <a href="#">Изменить...</a></p>
-<p>Телефон: @Model.phone <a href="#">Изменить...</a></p>
+<div id="data_print">
+    <p>Имя: @Model.name</p>
+    <p>Фамилия: @Model.surname</p>
+    <p>Email: @Model.email</p>
+    <p>Телефон: @Model.phone</p>
+    <a class="btn-info" onclick="ChangeInfo()">Изменить информацию...</a>
+</div>
+<form id="data_change" class="hidden" method="post" asp-action="UserLK">
+    <input type="hidden" value="@Model.id" name="uid"/>
+    <p>Имя: <input type="text" name="name" value="@Model.name" /></p>
+    <p>Фамилия: <input type="text" name="surname" value="@Model.surname" /></p>
+    <p>Email: @Model.email <i>Ваш аккаунт привязан к email, так что вы не можете его изменить.</i></p>
+    <p>Телефон: <input type="text" name="phone" value="@Model.phone" /></p>
+    <input class="btn-info" type="submit" value="Применить"/><a class="btn-info" onclick="ChangeInfo()">Отмена</a>
+</form>
+<br/>
 <p style="font-weight: bold;"><a asp-action="UsersAd" asp-controller="Home">Мои объявления</a></p>
 <p style="font-weight: bold;"><a asp-action="AnnouncementAdding" asp-controller="Home">Добавить объявление</a></p>
 <p style="font-weight: bold;"><a asp-action="UsersFavorite" asp-controller="Home">Избранное</a></p>
+
+<script>
+    function ChangeInfo() {
+        var div = document.getElementById("data_print");
+        var form = document.getElementById("data_change");
+
+        div.classList.toggle("hidden");
+        form.classList.toggle("hidden");
+    }
+</script>

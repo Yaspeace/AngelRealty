@@ -70,9 +70,22 @@ namespace Kursach.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult UserLK()
         {
             return View(db.users.Where(u => u.email == HttpContext.User.Identity.Name).First());
+        }
+
+        [Authorize]
+        [HttpPost]
+        public IActionResult UserLK(int uid, string name, string surname, string phone)
+        {
+            UserModel u = db.users.Find(uid);
+            u.name = name;
+            u.surname = surname;
+            u.phone = phone;
+            db.SaveChanges();
+            return View(u);
         }
 
         [Authorize]

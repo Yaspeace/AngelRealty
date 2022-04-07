@@ -47,20 +47,22 @@ namespace Kursach.Controllers
 
         public IActionResult Searching()
         {
-            return View(new SearchingModel(db.ad_types.ToList(), db.realty_types.ToList()));
+            return View("Searching", new SearchingModel(db.ad_types.ToList(), db.realty_types.ToList()));
         }
 
         [HttpPost]
         public IActionResult AdShow(FilterOptions options)
         {
+            if (options.ChosenTypes == null)
+                return Searching();
             List<AnnouncementModel> searched_ad = new List<AnnouncementModel>();
             foreach (var realty_type in options.ChosenTypes)
             {
                 searched_ad.AddRange(db.announcements.Where(an =>
                     an.realty_type_id == realty_type
-                        && an.rooms_num == options.RoomsNum
+                        && (options.RoomsNum == 0 || an.rooms_num == options.RoomsNum)
                         && (an.address.Contains(options.Address) || options.Address == null || options.Address == "") //Применение фильтров района поиска, если таковые есть
-                        && an.ad_type_id == options.Action)
+                        && (options.Action == 0 || an.ad_type_id == options.Action))
                     .ToList());
             }
             AdsViewModel model = new AdsViewModel("Объявления по запросу", DataSelectionToViewInfo(searched_ad), true);
@@ -213,7 +215,7 @@ namespace Kursach.Controllers
         {
             string realtyName = db.realty_types.Find(adToAdd.RealtyType).name;
             int new_id = 1;
-            if (db.announcements.Count() > 0)
+            if (db.announcements.Any())
                 new_id = db.announcements.Max(ad => ad.id) + 1;
             AnnouncementModel ad = new AnnouncementModel
             {

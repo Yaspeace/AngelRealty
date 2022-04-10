@@ -13,6 +13,14 @@ function Liking(ad_id) {
     });
 }
 
+function AddFileInput() {
+    var div = document.getElementById("files");
+    inp2 = document.createElement('input');
+    inp2.type = 'file';
+    inp2.name = 'Images';
+    div.appendChild(inp2);
+}
+
 function AddFile() {
     var div_files = document.getElementById("files");
     div_files.insertAdjacentHTML('afterend', '<p><input type="file" name="Images" /></p>');

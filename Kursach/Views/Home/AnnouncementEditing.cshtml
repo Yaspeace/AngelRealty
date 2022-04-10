@@ -4,11 +4,23 @@
 }
 
 <form asp-action="AnnouncementEditing" asp-controller="Home" method="post">
-    <p><select name="RealtyType">
-        <option disabled>Тип недвижимости</option>
-        @foreach(var typ in Model.RealtyTypes)
-        {
-            if(typ.id == Model.AdInfo.RealtyType)
+    @foreach(var img in Model.AdImages)
+    {
+        <div>
+            <img src="@img.path" width="200" height="200" align="left" />
+            <a class="btn-info">Изменить</a><br>
+            <a class="btn-info" onclick="AddInput(@img.id)">Удалить</a>
+        </div>
+    }
+    <div id="hid_inps"></div>
+    <div id="files"></div>
+    <div><a style="cursor: pointer;color: blue;" onclick="AddFile()">Добавить изображение</a></div>
+    <div>
+        <p><select name="RealtyType">
+            <option disabled>Тип недвижимости</option>
+            @foreach(var typ in Model.RealtyTypes)
+            {
+                if(typ.id == Model.AdInfo.RealtyType)
                 {
                     <option value="@typ.id" selected>@typ.name</option>
                 }
@@ -16,29 +28,41 @@
                 {
                     <option value="@typ.id">@typ.name</option>
                 }
-        }
-    </select></p>
-    <p><select name="AdType">
-        <option disabled>Вид объявления</option>
-        @foreach(var typ in Model.AdTypes)
-        {
-            if(typ.id == Model.AdInfo.AdType)
-                {
-                    <option value="@typ.id" selected>@typ.name</option>
-                }
-                else
-                {
-                    <option value="@typ.id">@typ.name</option>
-                }
-        }
-    </select></p>
-    <input type="hidden" value="@Model.AdInfo.Id" name="Id" />
-    <p><input type="text" name="Description" placeholder="Описание..." value="@Model.AdInfo.Description"/></p>
-    <p><input type="text" name="Square" placeholder="Площадь" value="@Model.AdInfo.Square"/></p>
-    <div id="flour"><input type="number" name="Flour" placeholder="Этаж" value="@Model.AdInfo.Flour"/></div>
-    <p><input type="number" name="TotalFlours" placeholder="Этажность" value="@Model.AdInfo.TotalFlours"/></p>
-    <p><input type="number" name="RoomsNum" placeholder="Число комнат" value="@Model.AdInfo.RoomsNum" /></p>
-    <p><input type="text" name="Address" placeholder="Адрес" value="@Model.AdInfo.Address" /></p>
-    <p><input type="text" name="Price" placeholder="Цена" value="@Model.AdInfo.Price" /></p>
-    <p><input type="submit" class="btn btn-primary" value="Изменить" />&nbsp;<a type="button" class="btn btn-primary" asp-action="UsersAd" asp-controller="Home">Отмена</a> </p>
+            }
+        </select></p>
+        <p><select name="AdType">
+            <option disabled>Вид объявления</option>
+            @foreach(var typ in Model.AdTypes)
+            {
+                if(typ.id == Model.AdInfo.AdType)
+                    {
+                        <option value="@typ.id" selected>@typ.name</option>
+                    }
+                    else
+                    {
+                        <option value="@typ.id">@typ.name</option>
+                    }
+            }
+        </select></p>
+        <input type="hidden" value="@Model.AdInfo.Id" name="Id" />
+        <p><input type="text" name="Description" placeholder="Описание..." value="@Model.AdInfo.Description"/></p>
+        <p><input type="text" name="Square" placeholder="Площадь" value="@Model.AdInfo.Square"/></p>
+        <div id="flour"><input type="number" name="Flour" placeholder="Этаж" value="@Model.AdInfo.Flour"/></div>
+        <p><input type="number" name="TotalFlours" placeholder="Этажность" value="@Model.AdInfo.TotalFlours"/></p>
+        <p><input type="number" name="RoomsNum" placeholder="Число комнат" value="@Model.AdInfo.RoomsNum" /></p>
+        <p><input type="text" name="Address" placeholder="Адрес" value="@Model.AdInfo.Address" /></p>
+        <p><input type="text" name="Price" placeholder="Цена" value="@Model.AdInfo.Price" /></p>
+        <p><input type="submit" class="btn btn-primary" value="Изменить" />&nbsp;<a type="button" class="btn btn-primary" asp-action="UsersAd" asp-controller="Home">Отмена</a> </p>
+    </div>
 </form>
+
+<script>
+    function AddInput(img_id) {
+        var div = document.getElementById("hid_inps");
+        inp2 = document.createElement( 'input' );
+        inp2.type = 'hidden';
+        inp2.name = 'imagesToDelete';
+        inp2.value = img_id;
+        div.appendChild(inp2);
+    }
+</script>

@@ -164,7 +164,7 @@ namespace Kursach.Controllers
             {
                 try
                 {
-                    string MainImagePath = db.ad_images.Where(im => im.ad_id == ad.id).First().path;
+                    string MainImagePath = db.ad_images.Any(i => i.ad_id == ad.id) ? db.ad_images.Where(im => im.ad_id == ad.id).First().path : "";
                     string RealtType = db.realty_types.Find(ad.realty_type_id).name;
                     bool isFavorite = false;
                     if (HttpContext.User.Identity.IsAuthenticated)
@@ -272,12 +272,14 @@ namespace Kursach.Controllers
                 TotalFlours = ad.total_flours,
                 Id = ad.id
             };
-            return View(new AnnouncementEditingViewModel(db.ad_types.ToList(), db.realty_types.ToList(), forminfo));
+            AnnouncementEditingViewModel model = new AnnouncementEditingViewModel(db.ad_types.ToList(), db.realty_types.ToList(), forminfo);
+            model.AdImages = db.ad_images.Where(i => i.ad_id == adId).ToList();
+            return View(model);
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult AnnouncementEditing(AddingAnnouncementForm adToEdit)
+        public IActionResult AnnouncementEditing(AddingAnnouncementForm adToEdit, int[] imagesToDelete, IFormFileCollection Images)
         {
             AnnouncementModel ad = db.announcements.Find(adToEdit.Id);
             ad.address = adToEdit.Address;
@@ -290,6 +292,20 @@ namespace Kursach.Controllers
             ad.rooms_num = adToEdit.RoomsNum;
             ad.square = adToEdit.Square;
             ad.name = $"{adToEdit.RoomsNum} - комн. {db.realty_types.Find(ad.realty_type_id).name.ToLower()}," + ((adToEdit.Flour == null || adToEdit.Flour < 1) ? $"этажей: {adToEdit.TotalFlours}" : $"этаж: {adToEdit.Flour}/{adToEdit.TotalFlours}");
+            
+            for(int i = 0; i < imagesToDelete.Length; i++)
+            {
+                int img_id = imagesToDelete[i];
+                AdImageModel img = db.ad_images.Find(img_id);
+                System.IO.File.Delete(_appEnv.WebRootPath + img.path);
+                db.ad_images.Remove(img);
+            }
+            
+            foreach (var img in Images)
+                UploadFile(img, ad.id);
+
+
+
             db.SaveChanges();
             return UsersAd();
         }

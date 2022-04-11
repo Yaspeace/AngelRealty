@@ -2,19 +2,21 @@
     ViewData["Title"] = "Home Page";
 }
 
-<h1 class="display-1">Популярные предложения:</h1>
-    <div style="display: inline-block; align-content: center;">
-        <img src="@Url.Content("~/staticimages/KomRealty.jpg")" width="300" height="300" /><br />
-        <p>Коммерческая недвижимость</p>
-        <p><a class="btn-info" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
+<h1 class="pop">Популярные предложения:</h1>
+<div class="index_boxes">
+    <div class="box1">
+        <img class="st_image" src="@Url.Content("~/staticimages/KomRealty.jpg")" /><br />
+        <p class="p_index">Коммерческая недвижимость</p>
+        <p><a class="btn" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
     </div>
-    <div style="display: inline-block; align-content: center;">
-        <img src="@Url.Content("~/staticimages/SocRealty.jpg")" width="300" height="300" /><br />
-        <p>Социальная недвижимость</p>
-        <p><a class="btn-info" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
+    <div  class="box2">
+        <img class="st_image" src="@Url.Content("~/staticimages/SocRealty.jpg")" /><br />
+        <p class="p_index">Социальная недвижимость</p>
+        <p><a class="btn" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
     </div>
-    <div style="display: inline-block; align-content: center;">
-        <img src="@Url.Content("~/staticimages/RoomArenda.jpg")" width="300" height="300" /><br />
-        <p>Аренда квартир</p>
-        <p><a class="btn-info" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
+    <div  class="box3">
+        <img class="st_image" src="@Url.Content("~/staticimages/RoomArenda.jpg")" /><br />
+        <p class="p_index">Аренда квартир</p>
+        <p><a class="btn" asp-action="Test" asp-controller="Home">Узнать больше</a></p>
     </div>
+</div>

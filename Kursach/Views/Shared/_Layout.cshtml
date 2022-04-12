@@ -6,47 +6,47 @@
     <title>@ViewData["Title"] - SweetHome</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~fonts/opensans/opensans.css" rel="stylesheet" type="text/css">
+    <link href="~fonts/Carattere-Regular/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <header>
-        <div class="bg-dark navbar">
-            <h1>SweetHome</h1>
-            <div class="align-content-end" style="padding-right: 4em;">
-                @if(Context.User.Identity.IsAuthenticated)
-                {
-                    <a class="text-info" asp-controller="Home" asp-action="Test">@Context.User.Identity.Name</a>
-                    <ul style="position: absolute; z-index: 10; list-style-type: none;">
-                        <li style="height: 3em; border: 1px solid gray; width: 100%; background: white;"><a asp-controller="Home" asp-action="UserLK">Личный кабинет</a></li>
-                        <li style="height: 3em; border: 1px solid gray; width: 100%; background: white;"><a asp-controller="Account" asp-action="Logout">Выход</a></li>
-                    </ul>
-                }
-                else
-                {
-                    <a class="text-info" asp-action="Login" asp-controller="Account">Вход</a>
-                }
-            </div>
-        </div> 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">О нас</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Searching">Поиск недвижимости</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="#">Контакты</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <nav>
+            <ul class="menu">
+                <li class="nav-item">
+                    <div class="site_name">SweetHome</div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="item" asp-area="" asp-controller="Home" asp-action="Index">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="item" asp-area="" asp-controller="Home" asp-action="About">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="item" asp-controller="Home" asp-action="Searching">Поиск жилья</a>
+                </li>
+                <li class="nav-item">
+                    <a class="item" href="#">Контакты</a>
+                </li>
+                <li class="LK">
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Home" asp-action="Test">@Context.User.Identity.Name</a>
+                        <ul class="LK_exit">
+                            <li><a asp-controller="Home" asp-action="UserLK">Личный кабинет</a></li>
+                            <li><a asp-controller="Account" asp-action="Logout">Выход</a></li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <a asp-action="Login" asp-controller="Account">Вход</a>
+                    }
+                </li>
+            </ul>
         </nav>
-    </header>
+     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

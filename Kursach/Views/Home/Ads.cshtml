@@ -3,40 +3,40 @@
     ViewData["Title"] = Model.Title;
 }
 
-@if(Model.Ads.Count == 0)
+@if (Model.Ads.Count == 0)
 {
     <p>Нет результатов!</p>
 }
 else
 {
-    @foreach(var ad in Model.Ads)
+    @foreach (var ad in Model.Ads)
     {
-         
+
         <div style="border: 2px solid black; border-radius: 5px;">
             <a href="/Home/Announcement?ad_id=@ad.Id">
                 <p><img src="@ad.ImagePath" width="200" height="200" /></p>
-            <p style="font-weight:bold; font-size: 20px;">@ad.RoomsNum - комн. @ad.RealtyType.ToLower(),&nbsp;@(ad.Flour == null ? "этажей: "+ ad.TotalFlours.ToString() : "этаж: "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
+                <p style="font-weight:bold; font-size: 20px;">@ad.RoomsNum - комн. @ad.RealtyType.ToLower(),&nbsp;@(ad.Flour == null ? "этажей: "+ ad.TotalFlours.ToString() : "этаж: "+ad.Flour.ToString()+"/"+ad.TotalFlours.ToString())</p>
             </a>
             <p>Площадь: @ad.Square</p>
             <p>Цена: @ad.Price</p>
-            @if(Model.ShowHearts)
+            @if (Model.ShowHearts)
             {
                 <p>
-                    @if(ad.IsFavorite) 
-                    { 
+                    @if (ad.IsFavorite)
+                    {
                         <a style="cursor: pointer;font-size: 30px;" onclick="Liking(@ad.Id);" id="@("like" + ad.Id.ToString())">&#9829;</a>
-                    } 
-                    else 
+                    }
+                    else
                     {
                         <a style="cursor: pointer;font-size: 30px;" onclick="Liking(@ad.Id);" id="@("like" + ad.Id.ToString())">&#9825;</a>
                     }
                 </p>
             }
-            @if(Model.ShowViews)
+            @if (Model.ShowViews)
             {
                 <p>Просмотров: @ad.ViewsNum</p>
             }
-            @if(Model.EnableCrud)
+            @if (Model.EnableCrud)
             {
                 <p><button type="button" class="btn btn-primary" onclick="OpenModal(@ad.Id)">Удалить</button>&nbsp;<a type="button" class="btn btn-primary" asp-action="AnnouncementEditing" asp-controller="Home" asp-route-adId="@ad.Id">Изменить</a></p>
             }
@@ -46,20 +46,24 @@ else
 <!--Диалоговое окно подтверждения удаления-->
 <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Удаление объявления</h5>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Удаление объявления</h5>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить объявление?</p>
+            </div>
+            <div class="modal-footer">
+                <form asp-action="AnnouncementRemove" asp-controller="Home" method="post">
+                    <input type="hidden" value="0" name="adId" id="adId" />
+                    <button type="submit" class="btn btn-primary">Да</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="HideModal()">Нет</button>
+            </div>
         </div>
-        <div class="modal-body">
-          <p>Вы уверены, что хотите удалить объявление?</p>
-        </div>
-        <div class="modal-footer">
-            <form asp-action="AnnouncementRemove" asp-controller="Home" method="post">
-                <input type="hidden" value="0" name="adId" id="adId"/>
-                <button type="submit" class="btn btn-primary">Да</button>
-            </form>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="HideModal()">Нет</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
+
+
+

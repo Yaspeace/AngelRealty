@@ -279,7 +279,7 @@ namespace Kursach.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult AnnouncementEditing(AddingAnnouncementForm adToEdit, int[] imagesToDelete, IFormFileCollection Images)
+        public IActionResult AnnouncementEditing(AddingAnnouncementForm adToEdit, int[] imagesToDelete)
         {
             AnnouncementModel ad = db.announcements.Find(adToEdit.Id);
             ad.address = adToEdit.Address;
@@ -301,10 +301,8 @@ namespace Kursach.Controllers
                 db.ad_images.Remove(img);
             }
             
-            foreach (var img in Images)
+            foreach (var img in adToEdit.Images)
                 UploadFile(img, ad.id);
-
-
 
             db.SaveChanges();
             return UsersAd();

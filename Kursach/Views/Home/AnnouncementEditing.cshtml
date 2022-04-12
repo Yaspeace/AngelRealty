@@ -3,13 +3,13 @@
     ViewData["Title"] = "Изменение объявления";
 }
 
-<form asp-action="AnnouncementEditing" asp-controller="Home" method="post">
+<form asp-action="AnnouncementEditing" asp-controller="Home" method="post" enctype="multipart/form-data">
     @foreach(var img in Model.AdImages)
     {
-        <div>
+        <div id="image_@img.id">
             <img src="@img.path" width="200" height="200" align="left" />
             <a class="btn-info">Изменить</a><br>
-            <a class="btn-info" onclick="AddInput(@img.id)">Удалить</a>
+            <a class="btn-info" onclick="Delete(@img.id)">Удалить</a>
         </div>
     }
     <div id="hid_inps"></div>
@@ -57,12 +57,15 @@
 </form>
 
 <script>
-    function AddInput(img_id) {
+    function Delete(img_id) {
         var div = document.getElementById("hid_inps");
         inp2 = document.createElement( 'input' );
         inp2.type = 'hidden';
         inp2.name = 'imagesToDelete';
         inp2.value = img_id;
         div.appendChild(inp2);
+
+        var img = document.getElementById("image_" + img_id);
+        img.classList.toggle("hidden");
     }
 </script>

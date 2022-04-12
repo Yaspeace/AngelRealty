@@ -14,9 +14,10 @@
         public string RealtyType { get; set; }
         public bool IsFavorite { get; set; }
         public int ViewsNum { get; set; }
+        public bool Vip { get; set; }
         public AdViewInfo() { }
 
-        public AdViewInfo(int id, string name, string imagePath, int roomsNum, int? flour, int totalFlours, double square, decimal price, string address, string realtyType, bool isFavorite, int viewsNum)
+        public AdViewInfo(int id, string name, string imagePath, int roomsNum, int? flour, int totalFlours, double square, decimal price, string address, string realtyType, bool isFavorite, int viewsNum, bool vip = false)
         {
             Id = id;
             Name = name;
@@ -30,6 +31,7 @@
             RealtyType = realtyType;
             IsFavorite = isFavorite;
             ViewsNum = viewsNum;
+            Vip = vip;
         }
     }
 }

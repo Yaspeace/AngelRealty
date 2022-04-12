@@ -167,13 +167,17 @@ namespace Kursach.Controllers
                     string MainImagePath = db.ad_images.Any(i => i.ad_id == ad.id) ? db.ad_images.Where(im => im.ad_id == ad.id).First().path : "";
                     string RealtType = db.realty_types.Find(ad.realty_type_id).name;
                     bool isFavorite = false;
+                    bool? vip = false;
                     if (HttpContext.User.Identity.IsAuthenticated)
                     {
                         UserModel user = db.users.Where(u => u.email == HttpContext.User.Identity.Name).FirstOrDefault();
                         if (user != null)
+                        {
                             isFavorite = db.users_favorites.Any(uf => uf.user_id == user.id && uf.ad_id == ad.id);
+                            vip = user.vip;
+                        }
                     }
-                    result.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num));
+                    result.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num, (bool)vip));
                 }
                 catch (InvalidOperationException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (InvalidOperation)"); }
                 catch (ArgumentNullException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (ArgumentNull)"); }
@@ -318,6 +322,24 @@ namespace Kursach.Controllers
             db.announcements.Remove(db.announcements.Find(adId));
             db.SaveChanges();
             return UsersAd();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public IActionResult Payment()
+        {
+            return View();
+        }
+        
+
+        [Authorize]
+        [HttpPost]
+        public RedirectResult PaymentProcess()
+        {
+            UserModel u = db.users.FirstOrDefault(u => u.email == HttpContext.User.Identity.Name);
+            u.vip = true;
+            db.SaveChanges();
+            return Redirect("UserLK");
         }
 
         private void UploadFile(IFormFile FileToUpload, int adId)

@@ -174,7 +174,7 @@ namespace Kursach.Controllers
                         if (user != null)
                         {
                             isFavorite = db.users_favorites.Any(uf => uf.user_id == user.id && uf.ad_id == ad.id);
-                            vip = user.vip;
+                            vip = user.vip ?? false;
                         }
                     }
                     result.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num, (bool)vip));

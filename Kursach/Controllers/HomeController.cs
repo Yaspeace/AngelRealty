@@ -167,17 +167,17 @@ namespace Kursach.Controllers
                     string MainImagePath = db.ad_images.Any(i => i.ad_id == ad.id) ? db.ad_images.Where(im => im.ad_id == ad.id).First().path : "";
                     string RealtType = db.realty_types.Find(ad.realty_type_id).name;
                     bool isFavorite = false;
-                    bool? vip = false;
+                    UserModel ad_owner = db.users.Find(ad.user_id);
+                    bool vip = ad_owner.vip ?? false;
                     if (HttpContext.User.Identity.IsAuthenticated)
                     {
                         UserModel user = db.users.Where(u => u.email == HttpContext.User.Identity.Name).FirstOrDefault();
                         if (user != null)
                         {
                             isFavorite = db.users_favorites.Any(uf => uf.user_id == user.id && uf.ad_id == ad.id);
-                            vip = user.vip ?? false;
                         }
                     }
-                    result.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num, (bool)vip));
+                    result.Add(new AdViewInfo(ad.id, ad.name, MainImagePath, ad.rooms_num, ad.flour, ad.total_flours, ad.square, ad.price, ad.address, RealtType, isFavorite, ad.views_num, vip));
                 }
                 catch (InvalidOperationException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (InvalidOperation)"); }
                 catch (ArgumentNullException) { _logger.LogError($"Cant load image for announcement with id {ad.id} (ArgumentNull)"); }
